@@ -1,19 +1,22 @@
-from flask import Flask, Response,request, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from flask_jwt_extended import JWTManager
+from flask import Flask
+from flask import Flask, Response,request, jsonify
 import json
 from datetime import datetime
-from flask_migrate import Migrate
-from bson.objectid import ObjectId
-from flask_jwt_extended import JWTManager
-from flask_jwt_extended import (jwt_required, create_access_token, get_jwt_identity)
 from kanpai import Kanpai
 from passlib.apps import custom_app_context as pwd_context
-import os
+from bson.objectid import ObjectId
+from flask_jwt_extended import (jwt_required, create_access_token, get_jwt_identity)
+
+
+
 
 
 app = Flask(__name__)
-
 app.config['SECRET_KEY'] = 'ThisIsmysecretkeythatyou3cantaccess'
+
 
 
 # CONFIGURING DATABASE
@@ -43,19 +46,6 @@ class NewUser(db.Model):
         self.role = role
         self.password = password
 
-@app.route('/signup', methods=['POST'])
-def user_signup_new():
-    if request.method == 'POST':
-        if request.is_json:
-            data = request.get_json()
-            new_user = NewUser(firstname=data['firstName'], lastname=data['lastName'], email=data['email'], password=data['password'], role=data['roles'])
-
-            db.session.add(new_user)
-            db.session.commit()
-            return {"message": f"User {new_user.email} has been created successfully."}
-        else:
-            return {"error": "The request payload is not in JSON format"}
-#
 
 @app.route('/user/signUp', methods=['POST'])
 def user_signup():
@@ -188,6 +178,8 @@ schema = Kanpai.Object({
     "password": Kanpai.String().max(20).trim().required("pass required")
 })
 #############################################################
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)

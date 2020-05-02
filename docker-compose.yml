@@ -1,0 +1,26 @@
+version: '3.6'
+
+services:
+  userservice:
+    build: .
+    depends_on:
+      - db
+    environment:
+      SQLALCHEMY_DATABASE_URI: postgresql://postgres:alter@localhost:5432/bookslibrary
+    ports:
+      - 5000:5000
+    volumes:
+      - .:/usr/src/app
+      - ./migrations:/usr/src/app/migrations
+    restart: always
+
+  database:
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: alter
+      POSTGRES_DB: bookslibrary
+    image: postgres:latest
+    ports:
+      - 5707:5432
+    restart: always
+
