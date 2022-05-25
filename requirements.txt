@@ -6,4 +6,4 @@ Jinja2==2.11.2
 kanpai==0.1.14
 pip==20.0.2
 psycopg2==2.8.5
-PyJWT==1.7.1
+PyJWT==2.4.0
